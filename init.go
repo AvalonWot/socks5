@@ -11,10 +11,10 @@ func init() {
 }
 
 var Resolve func(network string, addr string) (net.Addr, error) = func(network string, addr string) (net.Addr, error) {
-	if network == "tcp" {
-		return net.ResolveTCPAddr("tcp", addr)
+	if network == "tcp" || network == "tcp4" || network == "tcp6" {
+		return net.ResolveTCPAddr(network, addr)
 	}
-	return net.ResolveUDPAddr("udp", addr)
+	return net.ResolveUDPAddr(network, addr)
 }
 
 var DialTCP func(network string, laddr, raddr string) (net.Conn, error) = func(network string, laddr, raddr string) (net.Conn, error) {

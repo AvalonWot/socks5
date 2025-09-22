@@ -8,11 +8,17 @@ import (
 
 // Connect remote conn which u want to connect with your dialer
 // Error or OK both replied.
-func (r *Request) Connect(w io.Writer) (net.Conn, error) {
+func (r *Request) Connect(network string, dialer Dialer, w io.Writer) (net.Conn, error) {
 	if Debug {
 		log.Println("Call:", r.Address())
 	}
-	rc, err := DialTCP("tcp", "", r.Address())
+	var rc net.Conn
+	var err error
+	if dialer == nil {
+		rc, err = DialTCP(network, "", r.Address())
+	} else {
+		rc, err = dialer.Dial(network, r.Address())
+	}
 	if err != nil {
 		var p *Reply
 		if r.Atyp == ATYPIPv4 || r.Atyp == ATYPDomain {

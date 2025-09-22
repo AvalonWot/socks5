@@ -262,7 +262,7 @@ type DefaultHandle struct {
 // TCPHandle auto handle request. You may prefer to do yourself.
 func (h *DefaultHandle) TCPHandle(s *Server, c *net.TCPConn, r *Request) error {
 	if r.Cmd == CmdConnect {
-		rc, err := r.Connect(c)
+		rc, err := r.Connect("tcp", nil, c)
 		if err != nil {
 			return err
 		}
